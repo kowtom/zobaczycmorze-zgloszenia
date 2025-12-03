@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szczegóły zgłoszenia</title>
+</head>
+<body>
+    <div>
+        <h2>Twoje zgłoszenie</h2>
+<p><strong>Imie: </strong> {{zgloszenie.imie }}</p>
+<p><strong>nazwisko: </strong>{{ zgloszenie.nazwisko }}</p>
+<p><strong>email: </strong> {{zgloszenie.email }} </p>
+<p><strong>telefon: </strong> {{ zgloszenie.telefon }} </p>
+<p><strong>wzrok: </strong> {{zgloszenie.wzrok }} </p>
+<p><strong>status: </strong> {{zgloszenie.status}} </p>
+<h3> {{zgloszenie.rejs.nazwa}} </h3>
+<p><strong> {{zgloszenie.rejs.od}} -> {{zgloszenie.rejs.do}} </strong></p>
+    </div>
+</body>
+</html>

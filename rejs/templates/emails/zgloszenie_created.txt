@@ -1,0 +1,14 @@
+Dzień dobry {{ zgl.imie }} {{ zgl.nazwisko }}
+Dziękujemy za zgłoszenie na rejs {{ rejs.nazwa }}
+start: {{ rejs.od}} {{ rejs.start }}
+koniec: {{ rejs.do }} {{ rejs.koniec }}
+
+zaliczka: {{ rejs.zaliczka}}
+cena: {{ rejs.cena}}
+
+Prosimy o potwierdzenie udziału w rejsu klikając ten link:
+{{ link }}
+
+pozdrawiamy
+zespół....
+....

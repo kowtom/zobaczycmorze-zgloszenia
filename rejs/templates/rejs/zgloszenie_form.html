@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zgłoszenie na rejs</title>
+</head>
+<body>
+    <h2>Zgłoszenie na rejs: {{rejs.nazwa }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">wyślij zgłoszenie</button>
+</form>
+</body>
+</html>

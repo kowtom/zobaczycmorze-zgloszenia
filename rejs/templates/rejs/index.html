@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Rejsów</title>
+</head>
+<body>
+    <h1>Rejsy</h1>
+    <div>
+        <ul>
+            {% for rejs in rejsy %}
+            <li>
+                <h4><strong>{{ rejs.nazwa }}</strong></h4>
+                ({{rejs.od }} - {{ rejs.do }})
+                {{ rejs.start }} -> {{ rejs.koniec }}
+                <br>
+                <p>
+                    koszty: <ul>
+                        <li>zaliczka: {{ rejs.zaliczka }}</li>
+                        <li>do zapłaty: {{ rejs.cena }}</li>
+                    </ul>
+                </p>
+       <p>{{ rejs.opis }}</p>         
+       <br>
+       <a href="{% url 'zgloszenie_utworz' rejs.id %}">
+        Zapisz się
+       </a>
+            </li>
+            {% empty %}
+            <li>Brak rejsów w systemie</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
