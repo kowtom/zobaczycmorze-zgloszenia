@@ -58,6 +58,7 @@ class WachtaAdmin(admin.ModelAdmin):
 
 class WachtaInline(admin.TabularInline):
 	model = Wachta
+	form = WachtaForm
 	extra = 0
 	show_change_link = True
 
