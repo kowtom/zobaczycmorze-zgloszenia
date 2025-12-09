@@ -16,6 +16,23 @@
 <p><strong>status: </strong> {{zgloszenie.status}} </p>
 <h3> {{zgloszenie.rejs.nazwa}} </h3>
 <p><strong> {{zgloszenie.rejs.od}} -> {{zgloszenie.rejs.do}} </strong></p>
+<article>
+    <p>
+        {{ zgloszenie.rejs.opis }}
+    </p>
+</article>
+<h2>Rejsowe ogłoszenia</h2>
+<section>
+    <ol>
+    {% for o in zgloszenie.rejs.ogloszenia.all %}
+    <li><h5>{{ o.tytul }}</h5>
+        <p>{{ o.text }}</p>
+    </li>
+    {% empty %}
+    <li>brak ogłoszeń</li>
+{% endfor %}
+</ol>
+</section>
     </div>
 </body>
 </html>

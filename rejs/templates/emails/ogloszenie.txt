@@ -1,0 +1,7 @@
+Dzień dobry {{ zgl.imie }}
+do rejsu: {{ zgl.rejs.nazwa }} zostało dodane nowe ogłoszenie
+
+{{ ogloszenie.tytul }}
+{{ ogloszenie.text }}
+
+{% include "emails/_footer.txt" %}

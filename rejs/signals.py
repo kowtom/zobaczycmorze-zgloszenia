@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.shortcuts import reverse
-from .models import Zgloszenie, Wplata, Finanse, Info
+from .models import Ogloszenie, Zgloszenie, Wplata, Finanse
 from .mailers import send_simple_mail
 from django.template.loader import render_to_string
 
@@ -75,18 +75,18 @@ def utworz_finanse_dla_zgloszenia(sender, instance, created, **kwargs):
 	if created and not hasattr(instance, "finanse"):
 		Finanse.objects.create(zgloszenie=instance, kwota_do_zaplaty=instance.rejs.cena)
 
-@receiver(post_save, sender=Info)
-def info_post_save(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Ogloszenie)
+def ogloszenie_post_save(sender, instance, created, **kwargs):
 	if not created:
 		return
 	rejs = instance.rejs
 	zgloszenia = rejs.zgloszenia.all()
 	for z in zgloszenia:
-		subject = f"Nowa informacja dotycząca rejsu: {rejs.nazwa}"
+		subject = f"Nowe ogłoszenie dla rejsu:: {rejs.nazwa}"
 		context = {
-			"info": instance,
+			"ogloszenie": instance,
 			"zgl": z,
 			"rejs": rejs,
-			"link": reverse("zgloszenie_details", kwargs={"zgloszenie_id": z.token}),
+			"link": reverse("zgloszenie_details", kwargs={"token": z.token}),
 		}
-		send_simple_mail(subject, z.email, "emails/info_created", context)
+		send_simple_mail(subject, z.email, "emails/ogloszenie", context)

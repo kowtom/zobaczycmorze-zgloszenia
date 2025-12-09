@@ -2,12 +2,13 @@ from django import forms
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Rejs, Zgloszenie, Finanse, Wplata, Wachta, Info
+from .models import Rejs, Zgloszenie, Finanse, Wplata, Wachta, Ogloszenie
 
 
-class InfoInline(admin.StackedInline):
-	model = Info
+class OgloszenieInline(admin.StackedInline):
+	model = Ogloszenie
 	extra = 0
+	fields = ('tytul', 'text')
 
 class WachtaForm(forms.ModelForm):
 	czlonkowie = forms.ModelMultipleChoiceField(
@@ -98,7 +99,7 @@ class ZgloszenieInline(admin.TabularInline):
 @admin.register(Rejs)
 class RejsyAdmin(admin.ModelAdmin):
 	list_display = ['nazwa', 'od', 'do', 'start', 'koniec']
-	inlines = [ZgloszenieInline, WachtaInline, InfoInline]
+	inlines = [ZgloszenieInline, WachtaInline, OgloszenieInline]
 
 @admin.register(Zgloszenie)
 class ZgloszenieAdmin(admin.ModelAdmin):

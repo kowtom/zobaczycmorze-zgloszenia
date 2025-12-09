@@ -36,7 +36,7 @@ class Zgloszenie(models.Model):
 	statusy = [
 		("QUALIFIED", "zakfalifikowany"),
 		("NOT_QUALIFIED", "nie zakfalifikowany"),
-		("odrzocone", "odrzocone")
+		("odrzocone", "odrzócone")
 	]
 	wzrok_statusy = [
 		("WIDZI", "widzący"),
@@ -98,9 +98,14 @@ class Wplata(models.Model):
 	def __str__(self):
 		return f"Wpłata: {self.kwota} zł"
 
-class Info(models.Model):
-	rejs = models.ForeignKey(Rejs, on_delete=models.CASCADE)
+class Ogloszenie(models.Model):
+	rejs = models.ForeignKey(Rejs, on_delete=models.CASCADE, related_name="ogloszenia")
 	data = models.DateTimeField(auto_now_add=True)
-	text = models.TextField(default="krótka informacja o rejsie")
+	tytul = models.CharField(default="nowe ogłoszenie", max_length=100, null=False, blank=False, verbose_name="tytuł")
+	text = models.TextField(default="krótka informacja o rejsie", verbose_name="tekst")
+
+	class Meta:
+		verbose_name = "ogłoszenie"
+		verbose_name_plural = "ogłoszenia"
 	def __str__(self):
-		return self.text
+		return self.tytul
