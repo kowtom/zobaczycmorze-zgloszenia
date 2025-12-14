@@ -1,8 +1,8 @@
 import uuid
+from decimal import Decimal
+
 from django.db import models
-from django.db.models import Sum
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.db.models import Case, Sum, When
 from django.forms import ValidationError
 from django.urls import reverse
 
@@ -57,13 +57,23 @@ class Zgloszenie(models.Model):
         ("SLABO-WIDZACY", "słabo widzący"),
     ]
     role_pola = [("ZALOGANT", "załogant"), ("OFICER-WACHTY", "oficer wachty")]
-    imie = models.CharField(max_length=100, null=False, blank=False)
-    nazwisko = models.CharField(max_length=100, null=False, blank=False)
-    email = models.EmailField(null=False, blank=False)
-    telefon = models.CharField(max_length=15, blank=False, null=False)
+
+    imie = models.CharField(
+        max_length=100, null=False, blank=False, verbose_name="Imię"
+    )
+    nazwisko = models.CharField(
+        max_length=100, null=False, blank=False, verbose_name="Nazwisko"
+    )
+    email = models.EmailField(null=False, blank=False, verbose_name="Adres e-mail")
+    telefon = models.CharField(
+        max_length=15, blank=False, null=False, verbose_name="Numer telefonu"
+    )
     status = models.CharField(max_length=20, choices=statusy, default=statusy[1])
     wzrok = models.CharField(
-        max_length=15, choices=wzrok_statusy, default=wzrok_statusy[0]
+        max_length=15,
+        choices=wzrok_statusy,
+        default=wzrok_statusy[0],
+        verbose_name="Status wzroku",
     )
     rola = models.CharField(max_length=25, default="ZALOGANT", choices=role_pola)
     rejs = models.ForeignKey(Rejs, on_delete=models.CASCADE, related_name="zgloszenia")
@@ -77,12 +87,25 @@ class Zgloszenie(models.Model):
     token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     @property
-    def suma_wplat(self):
-        # wynik = self.wplaty.aggregate(total=Sum("kwota"))
-        # return wynik['total'] or 0
-        suma_wplat = sum(w.kwota for w in self.wplaty.filter(rodzaj="wplata"))
-        suma_zwrotow = sum(w.kwota for w in self.wplaty.filter(rodzaj="zwrot"))
-        return suma_wplat - suma_zwrotow
+    def suma_wplat(self) -> Decimal:
+        """Oblicza sumę wpłat minus zwroty (zoptymalizowane - jedno zapytanie SQL)."""
+        result = self.wplaty.aggregate(
+            wplaty_sum=Sum(
+                Case(
+                    When(rodzaj="wplata", then="kwota"),
+                    default=Decimal("0"),
+                )
+            ),
+            zwroty_sum=Sum(
+                Case(
+                    When(rodzaj="zwrot", then="kwota"),
+                    default=Decimal("0"),
+                )
+            ),
+        )
+        wplaty = result["wplaty_sum"] or Decimal("0")
+        zwroty = result["zwroty_sum"] or Decimal("0")
+        return wplaty - zwroty
 
     @property
     def rejs_cena(self):
@@ -125,8 +148,8 @@ class Wplata(models.Model):
     )
 
     class Meta:
-        verbose_name = "wpłata"
-        verbose_name_plural = "wpłaty"
+        verbose_name = "Wpłata"
+        verbose_name_plural = "Wpłaty"
 
     def __str__(self):
         return f"Wpłata: {self.kwota} zł"
@@ -140,13 +163,13 @@ class Ogloszenie(models.Model):
         max_length=100,
         null=False,
         blank=False,
-        verbose_name="tytuł",
+        verbose_name="Tytuł",
     )
-    text = models.TextField(default="krótka informacja o rejsie", verbose_name="tekst")
+    text = models.TextField(default="krótka informacja o rejsie", verbose_name="Tekst")
 
     class Meta:
-        verbose_name = "ogłoszenie"
-        verbose_name_plural = "ogłoszenia"
+        verbose_name = "Ogłoszenie"
+        verbose_name_plural = "Ogłoszenia"
 
     def __str__(self):
         return self.tytul
