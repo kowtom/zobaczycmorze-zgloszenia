@@ -1,5 +1,7 @@
 FROM python:3.14.1-slim-trixie AS app-build
 
+LABEL org.opencontainers.image.source=https://github.com/kowtom/zobaczycmorze-zgloszenia
+
 WORKDIR /app
 
 ARG UID=1000
@@ -31,6 +33,8 @@ RUN uv sync --frozen --no-install-project
 CMD ["bash"]
 
 FROM python:3.14.1-slim-trixie AS app
+
+LABEL org.opencontainers.image.source=https://github.com/kowtom/zobaczycmorze-zgloszenia
 
 WORKDIR /app
 
