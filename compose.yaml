@@ -11,11 +11,14 @@ services:
   mailcatcher:
     image: sj26/mailcatcher
     restart: always
+    environment:
+      VIRTUAL_HOST: ${MAILCATCHER_VIRTUAL_HOST}
     ports:
       - 1080:1080
 
   app:
     build: .
+    image: ghcr.io/kowtom/zm
     env_file: .env
     volumes:
       - .:/app
