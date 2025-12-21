@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+  mailcatcher:
+    image: sj26/mailcatcher
+    restart: always
+    ports:
+      - 1080:1080
+
+  app:
+    build: .
+    env_file: .env
+    volumes:
+      - .:/app
+      - /app/.venv
+    ports:
+      - 8000:8000
+
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./ssl:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+volumes:
+  postgres:
