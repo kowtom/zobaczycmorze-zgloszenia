@@ -30,9 +30,9 @@ services:
     image: nginxproxy/nginx-proxy
     ports:
       - "80:80"
-      - "443:443"
+#      - "443:443"
     volumes:
-      - ./ssl:/etc/nginx/certs:ro
+#      - ./ssl:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
 volumes:
   postgres:
