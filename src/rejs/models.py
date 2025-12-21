@@ -68,7 +68,7 @@ class Zgloszenie(models.Model):
     telefon = models.CharField(
         max_length=15, blank=False, null=False, verbose_name="Numer telefonu"
     )
-    status = models.CharField(max_length=20, choices=statusy, default=statusy[1])
+    status = models.CharField(max_length=200, choices=statusy, default=statusy[1])
     wzrok = models.CharField(
         max_length=15,
         choices=wzrok_statusy,
