@@ -262,6 +262,15 @@ wheels = [
 ]
 
 [[package]]
+name = "verbose-csrf-middleware"
+version = "6.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/44/3e535cc7d58664d68cb7e341317f5d3e1f7ecdee17079ef3e8e267e963b5/verbose_csrf_middleware-6.0.0.tar.gz", hash = "sha256:9bd4fee530137cf1005416d8fac4e843df69eb665e95d446b62458d0f421504d", size = 17348, upload-time = "2025-12-06T21:04:11.319Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/61/cd/b1c691629f8d80be4997d464331bce198374158f6a1385f6d8dd7e469fa2/verbose_csrf_middleware-6.0.0-py3-none-any.whl", hash = "sha256:900a8dbfd6e67bf533aab8b3e6ae1d0c7c77e8797ea29a6649873e31b104a7f9", size = 13914, upload-time = "2025-12-06T21:04:10.304Z" },
+]
+
+[[package]]
 name = "zm-zgloszenia"
 version = "0.1.0"
 source = { virtual = "." }
@@ -271,6 +280,7 @@ dependencies = [
     { name = "gunicorn" },
     { name = "psycopg" },
     { name = "sqlparse" },
+    { name = "verbose-csrf-middleware" },
 ]
 
 [package.dev-dependencies]
@@ -288,6 +298,7 @@ requires-dist = [
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "psycopg", specifier = ">=3.3.2" },
     { name = "sqlparse", specifier = ">=0.5.4" },
+    { name = "verbose-csrf-middleware", specifier = ">=6.0.0" },
 ]
 
 [package.metadata.requires-dev]

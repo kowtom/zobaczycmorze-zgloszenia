@@ -9,6 +9,7 @@ dependencies = [
     "gunicorn>=23.0.0",
     "psycopg>=3.3.2",
     "sqlparse>=0.5.4",
+    "verbose-csrf-middleware>=6.0.0",
 ]
 
 [dependency-groups]
