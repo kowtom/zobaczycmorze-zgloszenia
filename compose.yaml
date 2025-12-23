@@ -21,18 +21,19 @@ services:
     image: ghcr.io/kowtom/zm
     env_file: .env
     volumes:
-      - .:/app
-      - /app/.venv
+      - static:/app/src/static
     ports:
       - 127.0.0.1:8000:8000
 
   nginx-proxy:
     image: nginxproxy/nginx-proxy
     ports:
-      - "80:80"
-#      - "443:443"
+      - "443:443"
     volumes:
-#      - ./ssl:/etc/nginx/certs:ro
+      - static:/var/www/static
+      - ./nginx:/etc/nginx/vhost.d
+      - ./ssl:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
 volumes:
   postgres:
+  static:
