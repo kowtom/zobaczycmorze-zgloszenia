@@ -61,7 +61,6 @@ COPY --from=app-build /usr/local/bin/uv /usr/local/bin/uvx /usr/local/bin/
 COPY --chown=python:python . .
 
 WORKDIR /app/src
-RUN SECRET_KEY=dummy python manage.py collectstatic
 EXPOSE 8000
 
-CMD ["gunicorn", "-c", "python:zm_zgloszenia.gunicorn", "zm_zgloszenia.wsgi"]
+CMD ["python", "manage.py", "collectstatic", "&&", "gunicorn", "-c", "python:zm_zgloszenia.gunicorn", "zm_zgloszenia.wsgi"]
