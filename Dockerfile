@@ -59,4 +59,4 @@ COPY --chown=python:python . .
 WORKDIR /app/src
 EXPOSE 8000
 
-CMD ["python", "manage.py", "collectstatic", "&&", "gunicorn", "-c", "python:zm_zgloszenia.gunicorn", "zm_zgloszenia.wsgi"]
+CMD ["sh", "-c", "python manage.py collectstatic --no-input && gunicorn -c python:zm_zgloszenia.gunicorn zm_zgloszenia.wsgi"]
