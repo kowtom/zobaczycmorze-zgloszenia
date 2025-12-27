@@ -42,7 +42,8 @@ class WachtaForm(forms.ModelForm):
 
 		if self.instance and self.instance.pk:
 			self.fields["czlonkowie"].queryset = Zgloszenie.objects.filter(
-				rejs=self.instance.rejs
+				rejs=self.instance.rejs,
+				wachta=None
 			)
 			self.fields["czlonkowie"].initial = self.instance.czlonkowie.all()
 		else:
