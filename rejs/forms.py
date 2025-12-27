@@ -33,7 +33,7 @@ class ZgloszenieForm(forms.ModelForm):
 		}
 		help_texts = {
 			"telefon": "Format: 9-15 cyfr, np. 123456789 lub +48123456789",
-			"data_urodzenia": "podaj date urodzenia w formacie dd.mm.rrrr - jako separatora uzyj kropek",
+			"data_urodzenia": "podaj date urodzenia w formacie dd.mm.rrrr (np. 05.10.1990)",
 			"kod_pocztowy": "format: XX-XXX gdzie X oznacza cyfrę",
 "wzrok": "Wybierz opcję najbliższą Twojej sytuacji",
 			"obecnosc": "Czy brałeś juz udział w rejsach zobaczyć morze?",
@@ -66,14 +66,17 @@ class ZgloszenieForm(forms.ModelForm):
 				}
 			),
 			"data_urodzenia": forms.DateInput(
+				format="%d.%m.%Y",
 				attrs={
 					"autocomplete": "bday",
 					"inputmode": "date",
+					"placeholder": "dd.mm.rrrr",
 					"aria-required": "true",
 				}
 			),
 			"adres": forms.TextInput(
 				attrs={
+					"placeholder": "twój adres",
 					"aria-required": "true",
 				}
 			),
@@ -86,6 +89,7 @@ class ZgloszenieForm(forms.ModelForm):
 			),
 			"miejscowosc": forms.TextInput(
 				attrs={
+					"placeholder": "miejscowość",
 					"aria-required": "true",
 				}
 			),

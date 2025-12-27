@@ -97,7 +97,7 @@ class Zgloszenie(models.Model):
 	telefon = models.CharField(
 		max_length=15, blank=False, null=False, verbose_name="Numer telefonu"
 	)
-	data_urodzenia = models.DateField(blank=False, null=False, verbose_name="data urodzenia", default=datetime.date.today())
+	data_urodzenia = models.DateField(blank=False, null=False, verbose_name="data urodzenia")
 	adres = models.CharField(null=False, blank=False, default="unknown")
 	kod_pocztowy = models.CharField(null=False, blank=False, default="00-000", verbose_name="kod pocztowy")
 	miejscowosc = models.CharField(null=False, blank=False, default="unknown")
