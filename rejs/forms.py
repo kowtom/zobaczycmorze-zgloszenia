@@ -119,6 +119,33 @@ class ZgloszenieForm(forms.ModelForm):
 			if describedby:
 				field.widget.attrs["aria-describedby"] = " ".join(describedby)
 
+
+	def clean(self):
+		cleaned = super().clean()
+		imie = cleaned.get("imie")
+		nazwisko = cleaned.get("nazwisko")
+		email = cleaned.get("email")
+
+		if not (imie and nazwisko and email):
+			return cleaned
+
+		rejs = self.initial.get("rejs") or self.instance.rejs
+
+		if rejs:
+			istnieje = Zgloszenie.objects.filter(
+				rejs=rejs,
+				imie__iexact=imie,
+				nazwisko__iexact=nazwisko,
+				email__iexact=email,
+			).exists()
+
+			if istnieje:
+				raise forms.ValidationError(
+					"Na ten rejs istnieje już zgłoszenie dla tej osoby."
+				)
+
+		return cleaned
+
 	def clean_telefon(self):
 		telefon = self.cleaned_data.get("telefon", "")
 		cleaned = (
