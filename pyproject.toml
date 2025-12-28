@@ -6,11 +6,10 @@ requires-python = ">=3.12"
 dependencies = [
     "Django>=5.2.9",
     "asgiref>=3.11.0",
-    "cryptography>=46.0.3",
     "gunicorn>=23.0.0",
     "psycopg>=3.3.2",
     "sqlparse>=0.5.4",
-    "verbose-csrf-middleware>=6.0.0",
+        "cryptography>=42.0.0",
 ]
 
 [dependency-groups]

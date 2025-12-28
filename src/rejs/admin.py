@@ -1,8 +1,23 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
-
+from django.http import HttpResponse
+from rejs.reports import generate_rejs_report
 from .models import Ogloszenie, Rejs, Wachta, Wplata, Zgloszenie, Dane_Dodatkowe
+
+
+@admin.action(description="Generuj raport Excel dla rejsu")
+def generate_report(modeladmin, request, queryset):
+	if queryset.count() != 1:
+		modeladmin.message_user(
+			request,
+			"Wybierz dokładnie jeden rejs.",
+			level="error"
+		)
+		return
+
+	rejs = queryset.first()
+	return generate_rejs_report(rejs, request.user)
 
 
 class OgloszenieInline(admin.StackedInline):
@@ -27,7 +42,8 @@ class WachtaForm(forms.ModelForm):
 
 		if self.instance and self.instance.pk:
 			self.fields["czlonkowie"].queryset = Zgloszenie.objects.filter(
-				rejs=self.instance.rejs
+				rejs=self.instance.rejs,
+				wachta=None
 			)
 			self.fields["czlonkowie"].initial = self.instance.czlonkowie.all()
 		else:
@@ -93,6 +109,7 @@ class ZgloszenieInline(admin.TabularInline):
 @admin.register(Rejs)
 class RejsyAdmin(admin.ModelAdmin):
 	list_display = ["nazwa", "od", "do", "start", "koniec"]
+	actions = [generate_report]
 	inlines = [ZgloszenieInline, WachtaInline, OgloszenieInline]
 
 

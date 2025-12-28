@@ -36,6 +36,7 @@ class Rejs(models.Model):
 	cena = models.DecimalField(default=1500, max_digits=10, decimal_places=2)
 	zaliczka = models.DecimalField(default=500, max_digits=10, decimal_places=2)
 	opis = models.TextField(default="tutaj opis rejsu", blank=False, null=False)
+	aktywna_rekrutacja = models.BooleanField(default=True, verbose_name="aktywna rekrutacja")
 
 	def __str__(self) -> str:
 		return self.nazwa
@@ -43,6 +44,14 @@ class Rejs(models.Model):
 	@property
 	def reszta_do_zaplaty(self):
 		return self.cena - self.zaliczka
+
+	def clean(self):
+		super().clean()
+		if self.od and self.do and self.od > self.do:
+			raise ValidationError(
+				{"od": "Data rozpoczęcia nie może być późniejsza niż data zakończenia."}
+			)
+
 
 	class Meta:
 		verbose_name = "Rejs"
@@ -88,7 +97,10 @@ class Zgloszenie(models.Model):
 	telefon = models.CharField(
 		max_length=15, blank=False, null=False, verbose_name="Numer telefonu"
 	)
-	data_urodzenia = models.DateField(blank=False, null=False, verbose_name="data urodzenia", default=datetime.date.today())
+	data_urodzenia = models.DateField(blank=False, null=False, verbose_name="data urodzenia")
+	adres = models.CharField(null=False, blank=False, default="unknown")
+	kod_pocztowy = models.CharField(null=False, blank=False, default="00-000", verbose_name="kod pocztowy")
+	miejscowosc = models.CharField(null=False, blank=False, default="unknown")
 	obecnosc = models.CharField(
 		max_length=3,
 		choices=obecnosc_pola,
@@ -157,6 +169,13 @@ class Zgloszenie(models.Model):
 	class Meta:
 		verbose_name = "Zgłoszenie"
 		verbose_name_plural = "Zgłoszenia"
+		constraints = [
+			models.UniqueConstraint(
+				fields=["rejs", "imie", "nazwisko", "email"],
+				name="unique_zgloszenie_na_rejs_dla_osoby",
+			)
+		]
+
 
 
 class Wplata(models.Model):
@@ -228,6 +247,9 @@ class Dane_Dodatkowe(models.Model):
 	class Meta:
 		verbose_name = "dane dodatkowe"
 		verbose_name_plural = "dane dodatkowe"
+		permissions = [
+			("export_sensitive_data", "Może eksportować dane wrażliwe do raportów"),
+		]
 
 	def __str__(self) -> str:
 		return f"dane dodatkowe dla zgłoszenia: {self.zgloszenie_id}"
